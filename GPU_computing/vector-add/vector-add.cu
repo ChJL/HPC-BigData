@@ -27,6 +27,8 @@ static void checkCudaCall(cudaError_t result) {
 
 __global__ void vectorAddKernel(float* A, float* B, float* Result) {
 // insert operation here
+int i = threadIdx.x + block.Dim.x * blockIdx.x
+Result[i] = A[i] + B[i]
 
 }
 
