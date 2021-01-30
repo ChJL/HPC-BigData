@@ -1,0 +1,5 @@
+Adding two vectors of 65536 integer elements.
+vector-multi (sequential): 		  = 0.000863732 seconds
+vector-multi (kernel): 		  = 5.24252e-05 seconds
+vector-multi (memory): 		  = 0.00109076 seconds
+results OK!

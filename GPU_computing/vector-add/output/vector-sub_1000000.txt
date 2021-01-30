@@ -1,0 +1,5 @@
+Adding two vectors of 1000000 integer elements.
+vector-sub (sequential): 		  = 0.00485047 seconds
+vector-sub (kernel): 		  = 0.000154403 seconds
+vector-sub (memory): 		  = 0.00822921 seconds
+results OK!

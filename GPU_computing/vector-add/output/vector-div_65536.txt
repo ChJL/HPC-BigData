@@ -1,0 +1,5 @@
+Adding two vectors of 65536 integer elements.
+vector-div (sequential): 		  = 0.000415335 seconds
+vector-div (kernel): 		  = 3.87553e-05 seconds
+vector-div (memory): 		  = 0.000529133 seconds
+results OK!

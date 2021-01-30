@@ -1,0 +1,4 @@
+Adding two vectors of 256 integer elements.
+vector-add (sequential): 		  = 8.10361e-07 seconds
+cuda error: invalid configuration argument
+srun: error: r30n1: task 0: Exited with exit code 1

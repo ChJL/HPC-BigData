@@ -1,0 +1,3 @@
+kernel invocation took 		0.03696 milliseconds
+vector-add (CUDA, total): 		  =    0.2066 seconds
+results OK!

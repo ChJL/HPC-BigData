@@ -1,0 +1,5 @@
+Adding two vectors of 655360 integer elements.
+vector-multi (sequential): 		  = 0.00507177 seconds
+vector-multi (kernel): 		  = 0.000110294 seconds
+vector-multi (memory): 		  = 0.00468747 seconds
+results OK!
