@@ -69,7 +69,7 @@ void vectorAddCuda(int n, float* a, float* b, float* result) {
 
     // execute kernel
     kernelTime1.start();
-    vectorAddKernel<<<n/threadBlockSize, threadBlockSize>>>(deviceA, deviceB, deviceResult);
+    vectorAddKernel<<<n/threadBlockSize+1, threadBlockSize>>>(deviceA, deviceB, deviceResult);
     cudaDeviceSynchronize();
     kernelTime1.stop();
 
@@ -96,7 +96,7 @@ void vectorAddSeq(int n, float* a, float* b, float* result) {
   
   sequentialTime.start();
   for (i=0; i<n; i++) {
-	result[i] = a[i]+b[i];
+	result[i] = a[i] + b[i];
   }
   sequentialTime.stop();
   
@@ -105,7 +105,7 @@ void vectorAddSeq(int n, float* a, float* b, float* result) {
 }
 
 int main(int argc, char* argv[]) {
-    int n = 655360;
+    int n = 1000000;
     float* a = new float[n];
     float* b = new float[n];
     float* result = new float[n];

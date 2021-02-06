@@ -27,12 +27,12 @@ static void checkCudaCall(cudaError_t result) {
 
 __global__ void encryptKernel(char* deviceDataIn, char* deviceDataOut) {
     unsigned index = blockIdx.x * blockDim.x + threadIdx.x;
-    deviceDataOut[index] = deviceDataIn[index];
+    deviceDataOut[index] = deviceDataIn[index]+index%256+ 3;
 }
 
 __global__ void decryptKernel(char* deviceDataIn, char* deviceDataOut) {
     unsigned index = blockIdx.x * blockDim.x + threadIdx.x;
-    deviceDataOut[index] = deviceDataIn[index];
+    deviceDataOut[index] = deviceDataIn[index]-index%256-3;
 }
 
 int fileSize() {
@@ -90,7 +90,7 @@ int EncryptSeq (int n, char* data_in, char* data_out)
   timer sequentialTime = timer("Sequential encryption");
   
   sequentialTime.start();
-  for (i=0; i<n; i++) { data_out[i]=data_in[i]; }
+  for (i=0; i<n; i++) { data_out[i]=data_in[i]+i%256+3; }
   sequentialTime.stop();
 
   cout << fixed << setprecision(6);
@@ -105,7 +105,7 @@ int DecryptSeq (int n, char* data_in, char* data_out)
   timer sequentialTime = timer("Sequential decryption");
 
   sequentialTime.start();
-  for (i=0; i<n; i++) { data_out[i]=data_in[i]; }
+  for (i=0; i<n; i++) { data_out[i]=data_in[i]-i%256-3; }
   sequentialTime.stop();
 
   cout << fixed << setprecision(6);
@@ -193,7 +193,7 @@ int DecryptCuda (int n, char* data_in, char* data_out) {
 
     // execute kernel
     kernelTime1.start();
-    decryptKernel<<<n/threadBlockSize, threadBlockSize>>>(deviceDataIn, deviceDataOut);
+    decryptKernel<<<n/threadBlockSize+1, threadBlockSize>>>(deviceDataIn, deviceDataOut);
     cudaDeviceSynchronize();
     kernelTime1.stop();
 

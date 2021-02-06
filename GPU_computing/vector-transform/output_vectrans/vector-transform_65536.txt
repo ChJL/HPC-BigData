@@ -1,0 +1,6 @@
+Iteratively transform vector A with vector B of 65536 integer elements.
+vector-transform (sequential): 		  = 0.000814732 seconds
+vector-transform (kernel): 		  = 6.75737e-05 seconds
+vector-transform (memory): 		  = 0.000696109 seconds
+error in results! Element 11 is 60.5, but should be 60.5
+srun: error: r31n2: task 0: Exited with exit code 1

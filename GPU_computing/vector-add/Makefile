@@ -4,7 +4,7 @@ CU_FLAGS	= -O2 -g --ptxas-options=-v #-gencode arch=compute_35,code=compute_35
 CC_FLAGS	= -O2 -m64 -Wall
 
 CU_SOURCES	= vector-add.cu
-CU_EV_SOURCES	= vector-add_events.cu
+CU_EV_SOURCES	= vector-add-events.cu
 CC_SOURCES	= timer.cc
 
 CU_OBJECTS	= $(CU_SOURCES:%.cu=%.o)

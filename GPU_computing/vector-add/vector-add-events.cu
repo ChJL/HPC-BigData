@@ -27,6 +27,8 @@ static void checkCudaCall(cudaError_t result) {
 
 __global__ void vectorAddKernel(float* A, float* B, float* Result) {
 // code here!
+int i = threadIdx.x + blockDim.x * blockIdx.x;
+Result[i] = A[i] + B[i];
 }
 
 
@@ -66,7 +68,7 @@ void vectorAddCuda(int n, float* a, float* b, float* result) {
 
     // execute kernel
     cudaEventRecord(start, 0);
-    vectorAddKernel<<<n/threadBlockSize, threadBlockSize>>>(deviceA, deviceB, deviceResult);
+    vectorAddKernel<<<n/threadBlockSize+1, threadBlockSize>>>(deviceA, deviceB, deviceResult);
     cudaEventRecord(stop, 0);
 
     // check whether the kernel invocation was successful
@@ -88,7 +90,7 @@ void vectorAddCuda(int n, float* a, float* b, float* result) {
 
 
 int main(int argc, char* argv[]) {
-    int n = 65536;
+    int n = 1000000;
     timer vectorAddTimer("vector add timer");
     float* a = new float[n];
     float* b = new float[n];

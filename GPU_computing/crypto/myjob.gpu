@@ -3,5 +3,5 @@
 #SBATCH -n 1 
 #SBATCH -p gpu_shared
 #SBATCH --gres=gpu:1 
-#SBATCH -o vector-add-events_1000000.txt
-srun ./vector-add-events
+#SBATCH -o crypto_out.txt
+srun ./crypto

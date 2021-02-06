@@ -5,6 +5,7 @@
 #include <iostream>
 #include "timer.h"
 
+
 using namespace std;
 
 /* Utility function, use to do error checking.
@@ -27,7 +28,12 @@ static void checkCudaCall(cudaError_t result) {
 
 __global__ void vectorTransformKernel(float* A, float* B, float* Result) {
 // insert operation here
-
+	int i = threadIdx.x + blockDim.x * blockIdx.x;
+	
+	for (int j=0; j<5; j++){
+	Result[i] += A[i] * B[i];
+	}
+	
 }
 
 void vectorTransformCuda(int n, float* a, float* b, float* result) {
@@ -67,7 +73,7 @@ void vectorTransformCuda(int n, float* a, float* b, float* result) {
 
     // execute kernel
     kernelTime1.start();
-    vectorTransformKernel<<<n/threadBlockSize, threadBlockSize>>>(deviceA, deviceB, deviceResult);
+    vectorTransformKernel<<<n/threadBlockSize+1, threadBlockSize>>>(deviceA, deviceB, deviceResult);
     cudaDeviceSynchronize();
     kernelTime1.stop();
 
@@ -88,7 +94,7 @@ void vectorTransformCuda(int n, float* a, float* b, float* result) {
     cout << "vector-transform (memory): \t\t" << memoryTime << endl;
 }
 
-int vectorTransformSeq(int n, float* a, float* b, float* result) {
+void vectorTransformSeq(int n, float* a, float* b, float* result) {
   int i,j; 
 
   timer sequentialTime = timer("Sequential");
@@ -106,7 +112,7 @@ int vectorTransformSeq(int n, float* a, float* b, float* result) {
 }
 
 int main(int argc, char* argv[]) {
-    int n = 655360;
+    int n = 256;
     float* a = new float[n];
     float* b = new float[n];
     float* result = new float[n];
