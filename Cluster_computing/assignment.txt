@@ -1,0 +1,91 @@
+ASSIGNMENT FOR "CLUSTER COMPUTING" (14th January 2021)
+------------------------------------------------------
+
+ANALYSYS OF THE COMPUTATION OF PI BASED ON THE LEIBNIZ SERIES
+
+In this assignment you are going to work with a parallel code written in C using the OpenMP library:
+
+= pi.c ===========================================
+#include <omp.h>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main (int argc, char *argv[])
+{
+
+  //initialize variables
+  int i;
+  double pi = 0;
+  int niter = 1000000000;
+
+  // Get timing
+  double start,end;
+  start=omp_get_wtime();
+
+  // Calculate PI using Leibnitz sum
+  /* Fork a team of threads */
+  #pragma omp parallel for reduction(+ : pi)
+  for(i = 0; i < niter; i++)
+  {
+     pi = pi + pow(-1, i) * (4 / (2*((double) i)+1));
+  } /* Reduction operation is done. All threads join master thread and disband */
+
+  // Stop timing
+  end=omp_get_wtime();
+
+  // Print result
+  printf("Pi estimate: %.20f, obtained in %f seconds\n", pi, end-start);
+}
+==================================================
+
+
+The code needs to be compiled with the following commands on Lisa:
+
+= compilepi ======================================
+#!/bin/bash
+
+module load 2020
+module load GCC
+gcc -fopenmp -o pi pi.c -lm
+==================================================
+
+
+The basis script to submit the job would be as follows:
+
+= pi.sh ==========================================
+#!/bin/bash
+#SBATCH --job-name="pi"
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=24
+#SBATCH --time=00:10:00
+#SBATCH --partition=normal
+#SBATCH --output=pi_%j.out
+#SBATCH --error=pi_%j.err
+
+module purge
+module load 2020
+module load GCC
+
+echo "OpenMP parallelism"
+echo
+
+for ncores in {4..24}
+
+do
+  export OMP_NUM_THREADS=$ncores
+
+  echo "CPUS: " $OMP_NUM_THREADS
+  echo "CPUS: " $OMP_NUM_THREADS >&2
+  ./pi
+  echo "DONE "
+done
+==================================================
+
+
+Given the previous introduction, please do the following tasks:
+
+- Compile and run the pi computation with 1 to 24 threads. Plot a graph to show the execution times of the computation (Y-axis) with respect to the amount of numbers in the Leibniz series (X-axis). How would you explain the observed performance, considering that an average node of Lisa has 16 processors?
+- Compile the code with 31250000, 62500000, 125000000, 250000000, 500000000, 1000000000 and 2000000000 numbers in the Leibniz series and run the pi computation only with 24 threads in all cases. Plot a graph to show the execution times of the computation (Y-axis) with respect to the amount of numbers in the Leibniz series (X-axis).
+- Taking the simulation of 2000000000 numbers and 24 threads as a reference, how would you create another graph in which you would show the weak scaling of the problem from 1 to 24 threads?
